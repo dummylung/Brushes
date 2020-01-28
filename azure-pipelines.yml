@@ -4,7 +4,10 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/xcode
 
 pool:
-  vmImage: 'macos-latest'
+  vmImage: 'macos-10.14'
+
+variables:
+  - group: 'Apple Signing'
 
 steps:
 - task: InstallAppleCertificate@2
