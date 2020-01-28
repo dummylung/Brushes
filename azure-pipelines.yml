@@ -7,6 +7,15 @@ pool:
   vmImage: 'macos-latest'
 
 steps:
+- task: InstallAppleCertificate@2
+  inputs:
+   certSecureFile: '$(certFileName)'
+   certPwd: '$(certPassword)'
+
+- task: InstallAppleProvisioningProfile@1
+  inputs:
+   provProfileSecureFile: '$(provProfileName)'
+
 - task: Xcode@5
   inputs:
     actions: 'build'
@@ -16,15 +25,16 @@ steps:
     xcWorkspacePath: '**/Brushes.xcodeproj/project.xcworkspace'
     xcodeVersion: 'default' # Options: 8, 9, 10, default, specifyPath,
     packageApp: true
-
-- task: CopyFiles@2
-  inputs:
-    contents: '**/*.ipa'
-    targetFolder: '$(Build.ArtifactStagingDirectory)'
+    signingOption: 'manual'
+    signingIdentity: '$(APPLE_CERTIFICATE_SIGNING_IDENTITY)'
+    provisioningProfileUuid: '$(APPLE_PROV_PROFILE_UUID)'
+    exportPath: '$(Build.ArtifactStagingDirectory)'
+    teamId: 'GWR2NL6VQE'
+    exportOptions: 'Specify'
+    exportMethod: 'app-store'
 
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'drop'
     publishLocation: 'Container'
-    
