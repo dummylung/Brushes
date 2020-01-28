@@ -4,6 +4,5 @@ build
 *.pbxuser
 *.perspectivev3
 xcuserdata
-*.xcworkspace
 .DS_Store
 .idea
